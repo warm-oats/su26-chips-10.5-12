@@ -6,7 +6,7 @@
 
 <!-- TODO: Update these for your repo! -->
 
-![All Specs](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/specs.yml)
+![All Specs](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/specs.yml/badge.svg)
 
 ---
 
