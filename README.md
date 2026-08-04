@@ -6,7 +6,7 @@
 
 <!-- TODO: Update these for your repo! -->
 
-[![All Specs](https://github.com/saasbook/hw-agile-iterations/actions/workflows/specs.yml/badge.svg)](https://github.com/saasbook/hw-agile-iterations/actions/workflows/specs.yml)
+![All Specs](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/specs.yml)
 
 ---
 
@@ -14,9 +14,9 @@
 
 <!-- Fill in at least the following info, but add more as is useful. -->
 
-Team Name / Number:
+Team Name / Number: Team 12
 Heroku Deployment:
-Team Members:
+Team Members: Quan Huynh, Parsa Faraji Alamouti, Aurelle Raviando, Zaid Madanat
 
 ---
 
