@@ -29,6 +29,8 @@ class Representative < ApplicationRecord
   # matching representatives for a search / county.
   # See https://www.geocod.io/docs/#data-appends-fields
   def self.civic_api_to_representative_params(rep_info)
+    return [] if rep_info.empty? || rep_info.nil?
+
     reps = []
     response = rep_info['results'][0]
     fields = response['fields']

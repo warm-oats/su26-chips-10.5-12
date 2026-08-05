@@ -26,23 +26,38 @@ require 'rails_helper'
 RSpec.describe Representative do
   describe ".civic_api_to_representative_params" do
     before(:each) do
-      @rep_res = Representative.create({ name: "Donald Beyer", ocdid: "412345",
-      title: "representative", party: "Democrat", photo_url: "https://www.congress.gov/img/member/b001292_200.jpg" })
+      @rep_res = Representative.create({ name: "Donald Beyer", ocdid: "412657",
+      title: "representative" })
+
+      @rep_info = JSON.parse(File.read("spec/geocodio_api_call_dump.json"))
+      @official = @rep_info['results'][0]['fields']['congressional_districts'][0]['current_legislators'][0]
 
       allow(Representative).to receive(:find_rep).and_return(@rep_res)
-      @rep_info = JSON.parse(File.read("./spec/api_json_dump.json"))
+      @result = Representative.civic_api_to_representative_params(@rep_info)
     end
-    it "should return array containing rep objects" do
-      result = Representative.civic_api_to_representative_params(@rep_info)
-
-      expect(result).to eq([@rep_res])
+    it "should return array containing rep object" do
+      expect(@result).to eq([@rep_res])
     end
     it "should return empty array when given no data" do
-      result = Representative.civic_api_to_representative_params([])
-
-      expect(result).to eq([])
+      result_empty = Representative.civic_api_to_representative_params([])
+      expect(result_empty).to be_empty
     end
     it "should call .find_rep with the right arguments" do
+      expect(Representative).to receive(:find_rep).with(
+        @official, 
+        title: "representative",
+        ocdid: "412657"
+      )
+      result = Representative.civic_api_to_representative_params(@rep_info)
+    end
+    it "should return array containing rep object with correct values" do
+      rep = @result[0]
+      expect(rep.name).to eq("Donald Beyer")
+      expect(rep.ocdid).to eq("412657")
+      expect(rep.title).to eq("representative")
+    end
+    it "should not return empty array when given valid arguments" do
+      expect(@result).not_to be_empty
     end
   end
 end

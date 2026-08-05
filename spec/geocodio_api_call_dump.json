@@ -1,0 +1,100 @@
+{
+  "input": {
+    "address_components": {
+      "number": "1109",
+      "predirectional": "N",
+      "street": "Highland",
+      "suffix": "St",
+      "formatted_street": "N Highland St",
+      "city": "Arlington",
+      "state": "VA",
+      "country": "US"
+    },
+    "formatted_address": "1109 N Highland St, Arlington, VA"
+  },
+  "results": [
+    {
+      "stable_address_key": "gcod_usndjrg9xn28uz888u3fkm6yusrdg",
+      "address_components": {
+        "number": "1109",
+        "predirectional": "N",
+        "street": "Highland",
+        "suffix": "St",
+        "formatted_street": "N Highland St",
+        "city": "Arlington",
+        "county": "Arlington County",
+        "state": "VA",
+        "zip": "22201",
+        "country": "US"
+      },
+      "address_lines": [
+        "1109 N Highland St",
+        "",
+        "Arlington, VA 22201"
+      ],
+      "formatted_address": "1109 N Highland St, Arlington, VA 22201",
+      "location": {
+        "lat": 38.886672,
+        "lng": -77.094735
+      },
+      "accuracy": 1,
+      "accuracy_type": "rooftop",
+      "match_type": "building_centroid",
+      "source": "Arlington",
+      "fields": {
+        "congressional_districts": [
+          {
+            "name": "Congressional District 8",
+            "district_number": 8,
+            "ocd_id": "ocd-division/country:us/state:va/cd:8",
+            "congress_number": "119th",
+            "congress_years": "2025-2027",
+            "proportion": 1,
+            "current_legislators": [
+              {
+                "type": "representative",
+                "seniority": null,
+                "bio": {
+                  "last_name": "Beyer",
+                  "first_name": "Donald",
+                  "birthday": "1950-06-20",
+                  "gender": "M",
+                  "party": "Democrat",
+                  "photo_url": "https://www.congress.gov/img/member/b001292_200.jpg",
+                  "photo_attribution": "Image courtesy of the Member"
+                },
+                "contact": {
+                  "url": "https://beyer.house.gov",
+                  "address": "1226 Longworth House Office Building Washington DC 20515-4608",
+                  "phone": "202-225-4376",
+                  "contact_form": null
+                },
+                "social": {
+                  "rss_url": null,
+                  "twitter": "RepDonBeyer",
+                  "facebook": "RepDonBeyer",
+                  "youtube": null,
+                  "youtube_id": "UCPJGVbOVcAVGiBwq8qr_T9w"
+                },
+                "references": {
+                  "bioguide_id": "B001292",
+                  "thomas_id": "02272",
+                  "opensecrets_id": "N00036018",
+                  "lis_id": null,
+                  "cspan_id": "21141",
+                  "govtrack_id": "412657",
+                  "votesmart_id": "1707",
+                  "ballotpedia_id": "Don Beyer",
+                  "washington_post_id": null,
+                  "icpsr_id": "21554",
+                  "wikipedia_id": "Don Beyer"
+                },
+                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
