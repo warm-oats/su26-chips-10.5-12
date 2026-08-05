@@ -24,39 +24,39 @@ require 'rails_helper'
 # We recommend creating a file for each model in the database.
 
 RSpec.describe Representative do
-  describe ".civic_api_to_representative_params" do
-    before(:each) do
-      @rep_res = Representative.create({ name: "Donald Beyer", ocdid: "412657",
-      title: "representative" })
+  describe '.civic_api_to_representative_params' do
+    before do
+      @rep_res = described_class.create({ name: 'Donald Beyer', ocdid: '412657',
+      title: 'representative' })
 
-      @rep_info = JSON.parse(File.read("spec/geocodio_api_call_dump.json"))
+      @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
       @official = @rep_info['results'][0]['fields']['congressional_districts'][0]['current_legislators'][0]
 
-      allow(Representative).to receive(:find_rep).and_return(@rep_res)
-      @result = Representative.civic_api_to_representative_params(@rep_info)
+      allow(described_class).to receive(:find_rep).and_return(@rep_res)
+      @result = described_class.civic_api_to_representative_params(@rep_info)
     end
-    it "should return array containing rep object" do
+
+    it 'returns array containing rep object' do
       expect(@result).to eq([@rep_res])
     end
-    it "should return empty array when given no data" do
-      result_empty = Representative.civic_api_to_representative_params([])
+
+    it 'returns empty array when given no data' do
+      result_empty = described_class.civic_api_to_representative_params([])
       expect(result_empty).to be_empty
     end
-    it "should call .find_rep with the right arguments" do
-      expect(Representative).to receive(:find_rep).with(
-        @official, 
-        title: "representative",
-        ocdid: "412657"
-      )
-      result = Representative.civic_api_to_representative_params(@rep_info)
+
+    it 'calls .find_rep with correct args' do
+      expect(described_class).to have_received(:find_rep).with(@official, title: 'representative', ocdid: '412657')
     end
-    it "should return array containing rep object with correct values" do
+
+    it 'returns array of rep objs with correct vals' do
       rep = @result[0]
-      expect(rep.name).to eq("Donald Beyer")
-      expect(rep.ocdid).to eq("412657")
-      expect(rep.title).to eq("representative")
+      expect(rep.name).to eq('Donald Beyer')
+      expect(rep.ocdid).to eq('412657')
+      expect(rep.title).to eq('representative')
     end
-    it "should not return empty array when given valid arguments" do
+
+    it 'returns non-empty arr with valid args' do
       expect(@result).not_to be_empty
     end
   end
