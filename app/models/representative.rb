@@ -30,17 +30,17 @@ class Representative < ApplicationRecord
   # See https://www.geocod.io/docs/#data-appends-fields
   def self.civic_api_to_representative_params(rep_info)
     reps = []
-    response = rep_info['results'][0]['response']
-    fields = response['results'][0]['fields']
+    response = rep_info['results'][0]
+    fields = response['fields']
     @legislators = fields['congressional_districts'][0]['current_legislators']
 
     @legislators.each_with_index do |official, _index|
       official['name'] = "#{official.dig('bio', 'first_name')} #{official.dig('bio', 'last_name')}"
       title = official['type']
       # Inspect all the data that's there to make part 1 easier.
-      # Rails.logger.debug official
-      # official.dig('bio', 'party')
-      ocdid = official['govtrack_id']
+      #Rails.logger.debug official
+      
+      ocdid = official['references']['govtrack_id']
       reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
     reps
