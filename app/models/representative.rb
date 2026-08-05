@@ -40,8 +40,8 @@ class Representative < ApplicationRecord
       official['name'] = "#{official.dig('bio', 'first_name')} #{official.dig('bio', 'last_name')}"
       title = official['type']
       # Inspect all the data that's there to make part 1 easier.
-      #Rails.logger.debug official
-      
+      # Rails.logger.debug official
+
       ocdid = official['references']['govtrack_id']
       reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
