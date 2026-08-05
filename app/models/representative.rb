@@ -59,6 +59,7 @@ class Representative < ApplicationRecord
       ocdid = official.dig('references', 'govtrack_id')
       reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
+    
     reps
   end
 
