@@ -26,6 +26,8 @@
 class Representative < ApplicationRecord
   has_many :news_items, dependent: :delete_all
 
+  validates :name, :ocdid, :title, presence: true
+
   # Review the Geocodio docs
   # https://www.geocod.io/docs/#congressional-districts
   def self.geocodio_search(query)
@@ -61,20 +63,26 @@ class Representative < ApplicationRecord
   end
 
   def self.find_rep(official, title: '', ocdid: '')
+    raise ArgumentError unless official.is_a?(Hash)
+    raise ArgumentError if !title.is_a?(String) || !ocdid.is_a?(String)
+
     rep = Representative.find_or_initialize_by(
       name: official['name'],
       ocdid: ocdid
     )
+    
     rep.update_from_geocodio(official, title, ocdid)
   end
 
   def update_from_geocodio(official, title, ocdid)
     self.title = title
     self.ocdid = ocdid
+
     update_bio(official['bio'] || {})
     update_contact(official['contact'] || {})
     update_social(official['social'] || {})
     update_references(official['references'] || {})
+
     save!
     self
   end
