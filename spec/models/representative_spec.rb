@@ -28,8 +28,8 @@ require 'rails_helper'
 RSpec.describe Representative do
   describe '.civic_api_to_representative_params' do
     before do
-      @rep_res = described_class.new(name: 'Donald Beyer', ocdid: '412657',
-                                     title: 'representative')
+      @rep_res = described_class.create({ name: 'Donald Beyer', ocdid: '412657',
+      title: 'representative' })
 
       @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
       response = @rep_info['results'][0]['response']['results'][0]['fields']
