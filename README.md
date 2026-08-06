@@ -7,6 +7,9 @@
 <!-- TODO: Update these for your repo! -->
 
 ![All Specs](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/specs.yml/badge.svg)
+[![RuboCop](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/rubocop.yml/badge.svg)](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/rubocop.yml)
+[![Maintainability](https://qlty.sh/gh/warm-oats/projects/su26-chips-10.5-12/maintainability.svg)](https://qlty.sh/gh/warm-oats/projects/su26-chips-10.5-12)
+[![codecov](https://codecov.io/gh/warm-oats/su26-chips-10.5-12/branch/main/graph/badge.svg)](https://codecov.io/gh/warm-oats/su26-chips-10.5-12)
 
 ---
 
