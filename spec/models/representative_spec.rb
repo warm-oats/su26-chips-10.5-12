@@ -30,7 +30,8 @@ RSpec.describe Representative do
       title: 'representative' })
 
       @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
-      @official = @rep_info['results'][0]['response']['results'][0]['fields']['congressional_districts'][0]['current_legislators'][0]
+      response = @rep_info['results'][0]['response']['results'][0]['fields']
+      @official = response['congressional_districts'][0]['current_legislators'][0]
 
       allow(described_class).to receive(:find_rep).and_return(@rep_res)
 
