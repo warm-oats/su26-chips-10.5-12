@@ -13,9 +13,10 @@ $(() => {
       .attr('class', 'actionmap-view-region')
       .attr('tabindex', 0)
       .attr('role', 'link')
-      .attr('aria-label', (d) => stateMap.counties[d.properties.COUNTYFP].name)
-      .attr('data-county-name', (d) => stateMap.counties[d.properties.COUNTYFP].name)
+      .attr('aria-label', (d) => stateMapUtils.countyName(stateMap, d))
+      .attr('data-county-name', (d) => stateMapUtils.countyName(stateMap, d))
       .attr('data-county-fips-code', (d) => d.properties.COUNTYFP)
+      .attr('data-search-url', (d) => stateMapUtils.countySearchUrl(stateMap, d))
       .attr('style', (d) => {
         if (d.properties.COUNTYFP === countyFipsCode) {
           return 'fill: #06159bff;';

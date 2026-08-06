@@ -31,14 +31,24 @@ Then /I click the state "(\w\w)"/i do |state|
 end
 
 Then /I click the county "(.*)"/i do |county_name|
-  # Same as above, you might find this helpful.
+  county = find("path[data-county-name='#{county_name}']")
+  visit county['data-search-url']
 end
 
 Then /I click the county with FIPS Code "(.*)"/i do |fips_code|
-  # Same as above, you might find this helpful.
+  county = find("path[data-county-fips-code='#{fips_code}']")
+  visit county['data-search-url']
 end
 
 Then /I should see (\d+) (?:states|counties)/i do |count|
-  # How many counties should the map render
-  # You might use this as a check that the right number of elements are rendered.
+  expect(page).to have_css('path.actionmap-view-region', count: count.to_i)
+end
+
+Then /I should see the county "(.*)"/i do |county_name|
+  expect(page).to have_css("path[data-county-name='#{county_name}']")
+end
+
+Then /the county "(.*)" should search representatives for "(.*)"/i do |county_name, query|
+  county = find("path[data-county-name='#{county_name}']")
+  expect(county['data-search-url']).to eq("/search/#{escape_uri_component(query)}")
 end

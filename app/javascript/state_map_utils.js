@@ -56,6 +56,15 @@ export const parseTopojson = (stateMap, topology) => {
   };
 };
 
+export const countyName = (stateMap, feature) => (
+  stateMap.counties[feature.properties.COUNTYFP].name
+);
+
+export const countySearchUrl = (stateMap, feature) => {
+  const query = encodeURIComponent(`${countyName(stateMap, feature)}, ${stateMap.state.symbol}`);
+  return `/search/${query}`;
+};
+
 export const setupEventHandlers = (stateMap) => {
   const targets = $('.actionmap-view-region');
   const hoverHtmlProvider = (elem) => {
@@ -63,9 +72,7 @@ export const setupEventHandlers = (stateMap) => {
     return `${county}, ${stateMap.state.symbol}`;
   };
   const clickCallback = (elem) => {
-    const county = elem.attr('data-county-name');
-    const query = encodeURIComponent(`${county}, ${stateMap.state.symbol}`);
-    window.location.href = `/search/${query}`;
+    window.location.href = elem.attr('data-search-url');
   };
   mapUtils.handleMapMouseEvents(targets, hoverHtmlProvider, clickCallback);
 };
