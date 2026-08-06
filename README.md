@@ -1,15 +1,9 @@
 # CHIP 10.5: ActionMap
 
-## You should edit this readme!
-
-> By the end of iteration 1, you should edit this file (and remove this message) to make sure you've updated the badge and links to Heroku, etc.
-
-<!-- TODO: Update these for your repo! -->
-
 ![All Specs](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/specs.yml/badge.svg)
-[![RuboCop](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/rubocop.yml/badge.svg)](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/rubocop.yml)
 [![Maintainability](https://qlty.sh/gh/warm-oats/projects/su26-chips-10.5-12/maintainability.svg)](https://qlty.sh/gh/warm-oats/projects/su26-chips-10.5-12)
-[![codecov](https://codecov.io/gh/warm-oats/su26-chips-10.5-12/branch/main/graph/badge.svg)](https://codecov.io/gh/warm-oats/su26-chips-10.5-12)
+![Coverage](docs/coverage.svg)
+[![Code Linters](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/linters.yml/badge.svg)](https://github.com/warm-oats/su26-chips-10.5-12/actions/workflows/linters.yml)
 
 ---
 
@@ -18,13 +12,13 @@
 <!-- Fill in at least the following info, but add more as is useful. -->
 
 Team Name / Number: Team 12
-Heroku Deployment:
+Render Deployment:
 Team Members: Quan Huynh, Parsa Faraji Alamouti, Aurelle Raviando, Zaid Madanat
 
 ---
 
 ActionMap is an app that allows users to learn more about their representatives,
-political events in their area as well as aggregate, share and view news items in their locality.
+political events in their area as well as aggregate, share, and view news items in their locality.
 
 <!-- [![codecov](https://codecov.io/gh/saasbook/hw-agile-iterations/branch/master/graph/badge.svg?token=SGYCvQX4Us)](https://codecov.io/gh/saasbook/hw-agile-iterations) -->
 
