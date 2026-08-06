@@ -2,6 +2,7 @@ name: Code Linters
 on:
   - pull_request
   - workflow_dispatch
+  - push
 
 permissions:
   statuses: write
