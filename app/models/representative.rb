@@ -32,8 +32,8 @@ class Representative < ApplicationRecord
     return [] if rep_info.blank?
 
     reps = []
-    response = rep_info['results'][0]
-    fields = response['fields']
+    response = rep_info['results'][0]['response']
+    fields = response['results'][0]['fields']
     @legislators = fields['congressional_districts'][0]['current_legislators']
 
     @legislators.each_with_index do |official, _index|

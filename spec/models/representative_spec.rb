@@ -30,14 +30,15 @@ RSpec.describe Representative do
       title: 'representative' })
 
       @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
-      @official = @rep_info['results'][0]['fields']['congressional_districts'][0]['current_legislators'][0]
+      @official = @rep_info['results'][0]['response']['results'][0]['fields']['congressional_districts'][0]['current_legislators'][0]
 
       allow(described_class).to receive(:find_rep).and_return(@rep_res)
+
       @result = described_class.civic_api_to_representative_params(@rep_info)
     end
 
     it 'returns array containing rep object' do
-      expect(@result).to eq([@rep_res])
+      expect(@result).to eq([@rep_res, @rep_res, @rep_res])
     end
 
     it 'returns empty array when given no data' do
