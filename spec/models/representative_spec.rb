@@ -73,7 +73,10 @@ RSpec.describe Representative do
 
     before do
       @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
-      @official = @rep_info['results'][0]['fields']['congressional_districts'][0]['current_legislators'][0]
+
+      response = @rep_info['results'][0]['response']['results'][0]['fields']
+
+      @official = response['congressional_districts'][0]['current_legislators'][0]
       @official['name'] = "#{@official.dig('bio', 'first_name')} #{@official.dig('bio', 'last_name')}"
     end
 
