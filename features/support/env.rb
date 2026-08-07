@@ -14,6 +14,7 @@ end
 
 SimpleCov.start 'rails' do
   # This is so we can sum the coverage across the two cucumber CI steps.
+  add_filter 'lib'
   profile = ENV['CUCUMBER_PROFILE'] || ENV['PROFILE'] ||
             begin
               if (arg = ARGV.find { |a| a.start_with?('--profile=') })
