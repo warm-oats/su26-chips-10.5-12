@@ -2,7 +2,6 @@ name: Code Linters
 on:
   - pull_request
   - workflow_dispatch
-  - push
 
 permissions:
   statuses: write
@@ -16,9 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 50
       - run: |
-          git fetch --no-tags --prune --depth=0 origin +refs/heads/*:refs/remotes/origin/*
+          git fetch --no-tags --prune --depth=50 origin +refs/heads/*:refs/remotes/origin/*
       - uses: actions/setup-node@v6
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
