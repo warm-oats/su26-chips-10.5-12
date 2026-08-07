@@ -57,7 +57,7 @@ class Representative < ApplicationRecord
       ocdid = official.dig('references', 'govtrack_id')
       reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
-    
+
     reps
   end
 
@@ -69,7 +69,7 @@ class Representative < ApplicationRecord
       name: official['name'],
       ocdid: ocdid
     )
-    
+
     rep.update_from_geocodio(official, title, ocdid)
   end
 
