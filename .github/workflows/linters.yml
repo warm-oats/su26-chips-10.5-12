@@ -16,9 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 10
+          fetch-depth: 0
       - run: |
-          git fetch --no-tags --prune --depth=10 origin +refs/heads/*:refs/remotes/origin/*
+          git fetch --no-tags --prune --depth=0 origin +refs/heads/*:refs/remotes/origin/*
       - uses: actions/setup-node@v6
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
