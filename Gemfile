@@ -68,9 +68,6 @@ gem 'date_validator'
 gem 'tzinfo-data', platforms: %i[windows]
 
 group :development, :test do
-  # Byebug for live debugging while calling method / function
-  gem 'byebug'
-  
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
   gem 'debug'
 
