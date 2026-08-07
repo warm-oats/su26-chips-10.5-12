@@ -24,9 +24,7 @@ Given /the Geocodio lookup for "(.*)" returns representatives/i do |query|
   end
 
   Representative.define_singleton_method(:civic_api_to_representative_params) do |response|
-    unless response == :stubbed_geocodio_response
-      raise "Unexpected geocodio response: #{response.inspect}"
-    end
+    raise "Unexpected geocodio response: #{response.inspect}" unless response == :stubbed_geocodio_response
 
     representatives
   end
