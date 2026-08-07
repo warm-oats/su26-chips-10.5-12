@@ -31,7 +31,6 @@ RSpec.describe Representative do
       @rep_res = described_class.create({ name: 'Donald Beyer', ocdid: '412657',
       title: 'representative' })
 
-<<<<<<< HEAD
       @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
       response = @rep_info['results'][0]['response']['results'][0]['fields']
       @official = response['congressional_districts'][0]['current_legislators'][0]
@@ -105,28 +104,6 @@ RSpec.describe Representative do
       expect(rep.name).to eq('Donald Beyer')
       expect(rep.ocdid).to eq('412657')
       expect(rep.title).to eq('representative')
-=======
-RSpec.describe Representative do
-  describe ".civic_api_to_representative_params" do
-    before(:each) do
-      @rep_res = Representative.create({ name: "Donald Beyer", ocdid: "412345",
-      title: "representative", party: "Democrat", photo_url: "https://www.congress.gov/img/member/b001292_200.jpg" })
-
-      allow(Representative).to receive(:find_rep).and_return(@rep_res)
-      @rep_info = JSON.parse(File.read("./spec/api_json_dump.json"))
-    end
-    it "should return array containing rep objects" do
-      result = Representative.civic_api_to_representative_params(@rep_info)
-
-      expect(result).to eq([@rep_res])
-    end
-    it "should return empty array when given no data" do
-      result = Representative.civic_api_to_representative_params([])
-
-      expect(result).to eq([])
-    end
-    it "should call .find_rep with the right arguments" do
->>>>>>> eb08b25 (Add unit test coverage)
     end
   end
 
