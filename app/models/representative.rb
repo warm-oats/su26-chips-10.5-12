@@ -26,8 +26,6 @@
 class Representative < ApplicationRecord
   has_many :news_items, dependent: :delete_all
 
-  validates :name, :ocdid, :title, presence: true
-
   # Review the Geocodio docs
   # https://www.geocod.io/docs/#congressional-districts
   def self.geocodio_search(query)
