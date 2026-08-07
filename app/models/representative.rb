@@ -4,12 +4,24 @@
 #
 # Table name: representatives
 #
-#  id         :integer          not null, primary key
-#  name       :string
-#  ocdid      :string
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :integer          not null, primary key
+#  address          :string
+#  birthday         :date
+#  contact_form_url :string
+#  facebook         :string
+#  gender           :string
+#  name             :string
+#  ocdid            :string
+#  party            :string
+#  phone            :string
+#  photo_url        :string
+#  title            :string
+#  twitter          :string
+#  website          :string
+#  youtube          :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  bioguide_id      :string
 #
 class Representative < ApplicationRecord
   has_many :news_items, dependent: :delete_all
@@ -41,26 +53,53 @@ class Representative < ApplicationRecord
       title = official['type']
       # Inspect all the data that's there to make part 1 easier.
       # Rails.logger.debug official
-
-      ocdid = official['references']['govtrack_id']
+      # official.dig('bio', 'party')
+      ocdid = official.dig('references', 'govtrack_id')
       reps << Representative.find_rep(official, ocdid: ocdid, title: title)
     end
     reps
   end
 
   def self.find_rep(official, title: '', ocdid: '')
-    rep = Representative.create({ name: official['name'], ocdid: ocdid,
-      title: title, party: official['party'], photo_url: official['photo_url'] })
-    rep.save
+    rep = Representative.find_or_initialize_by(
+      name: official['name'],
+      ocdid: ocdid
+    )
+    rep.update_from_geocodio(official, title, ocdid)
   end
 
-  def update_from_geocodio(official)
-    self.title = official['type']
-    self.ocdid = official['govtrack_id']
-    self.party = official['party']
-    self.photo_url = official['photo_url']
-    # TODO: store the address, phone and website
+  def update_from_geocodio(official, title, ocdid)
+    self.title = title
+    self.ocdid = ocdid
+    update_bio(official['bio'] || {})
+    update_contact(official['contact'] || {})
+    update_social(official['social'] || {})
+    update_references(official['references'] || {})
     save!
     self
+  end
+
+  def update_bio(bio)
+    self.party = bio['party']
+    self.birthday = bio['birthday']
+    self.gender = bio['gender']
+    self.photo_url = bio['photo_url']
+  end
+
+  def update_contact(contact)
+    self.address = contact['address']
+    self.phone = contact['phone']
+    self.contact_form_url = contact['contact_form']
+    self.website = contact['url']
+  end
+
+  def update_social(social)
+    self.twitter = social['twitter']
+    self.facebook = social['facebook']
+    self.youtube = social['youtube']
+  end
+
+  def update_references(references)
+    self.bioguide_id = references['bioguide_id']
   end
 end
