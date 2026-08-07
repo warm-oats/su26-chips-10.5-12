@@ -1,4 +1,68 @@
-.container-fluid.bg-light
-  .row.text-center
-    .col-12
-      %h1.text-center= @representative&.name
+.container.py-5
+  %h1= @representative.name
+
+  .row.mt-4
+    .col-md-4
+      - if @representative.photo_url.present?
+        = image_tag @representative.photo_url,
+                    alt: @representative.name,
+                    class: 'img-fluid rounded'
+
+    .col-md-8
+      %h2 Representative Information
+
+      %p
+        %strong Office:
+        = @representative.title
+
+      %p
+        %strong Party:
+        = @representative.party
+
+      %p
+        %strong Gender:
+        = @representative.gender
+
+      %p
+        %strong Birthday:
+        = @representative.birthday
+
+      %p
+        %strong Address:
+        = @representative.address
+
+      %p
+        %strong Phone:
+        = @representative.phone
+
+      - if @representative.website.present?
+        %p
+          %strong Website:
+          = link_to @representative.website, @representative.website
+
+      - if @representative.contact_form_url.present?
+        %p
+          = link_to 'Contact Form',
+                    @representative.contact_form_url,
+                    class: 'btn btn-primary'
+
+      %h3.mt-4 Social Media
+
+      - if @representative.twitter.present?
+        %p
+          %strong Twitter:
+          = @representative.twitter
+
+      - if @representative.facebook.present?
+        %p
+          %strong Facebook:
+          = @representative.facebook
+
+      - if @representative.youtube.present?
+        %p
+          %strong YouTube:
+          = @representative.youtube
+
+      = link_to 'Back to Representatives',
+                representatives_path,
+                class: 'btn btn-secondary mt-3'
