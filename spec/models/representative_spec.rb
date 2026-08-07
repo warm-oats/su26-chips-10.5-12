@@ -137,56 +137,62 @@ RSpec.describe Representative do
 
     before do
       @query = '1109 N Highland St, Arlington VA'
-      @GEOCODIO_API_KEY = 'correct_key'
-      @return_val = @GEOCODIO_API_KEY
+      @geocodio_api_key = 'correct_key'
+      @return_val = @geocodio_api_key
       @rep_info = JSON.parse(File.read('spec/geocodio_api_call_dump.json'))
       @key_name = 'GEOCODIO_API_KEY'
 
-      @geocodio_double = double("Geocodio double")
+      @geocodio_double = instance_double(Geocodio::Gem)
       allow(@geocodio_double).to receive(:geocode).with(@query, ['cd'])
-      .and_return(@rep_info)
+                                                  .and_return(@rep_info)
 
-      allow(ENV).to receive(:fetch).with(@key_name, anything)
-      .and_return(@return_val)
+      allow(ENV).to receive(:fetch).with(@key_name, anything) do
+        @return_val
+      end
 
-      allow(Geocodio::Gem).to receive(:new).with(@GEOCODIO_API_KEY)
-      .and_return(@geocodio_double)
+      allow(Geocodio::Gem).to receive(:new).with(@geocodio_api_key)
+                                           .and_return(@geocodio_double)
     end
 
-    it 'raises ArgumentError for empty/blank/invalid GEOCODIO_API_KEY' do
-      allow(ENV).to receive(:fetch).with(@key_name, anything)
-      .and_return('')
+    it 'raises ArgumentError for empty/blank GEOCODIO_API_KEY' do
+      @return_val = ''
+      expect { geocodio_search }.to raise_error(ArgumentError)
 
-      expect{ geocodio_search }.to raise_error(ArgumentError)
+      expect(@geocodio_double).not_to have_received(:geocode)
+      expect(Geocodio::Gem).not_to have_received(:new)
     end
 
-    it 'raises ArgumentError for incorrect/invalid GEOCODIO_API_KEY' do
-      allow(ENV).to receive(:fetch).with(@key_name, anything)
-      .and_return('random_api_key')
-      expect{ geocodio_search }.to raise_error(ArgumentError)
+    it 'raises ArgumentError for nil GEOCODIO_API_KEY' do
+      @return_val = nil
+      expect { geocodio_search }.to raise_error(ArgumentError)
 
-      allow(ENV).to receive(:fetch).with(@key_name, anything)
-      .and_return(nil)
-      expect{ geocodio_search }.to raise_error(ArgumentError)
+      expect(@geocodio_double).not_to have_received(:geocode)
+      expect(Geocodio::Gem).not_to have_received(:new)
     end
 
     it 'raises ArgumentError for wrong number of arguments' do
-      expect{ Representative.geocodio_search(@query, 'num') }.to raise_error(ArgumentError)
-      expect{ Representative.geocodio_search }.to raise_error(ArgumentError)
-      expect{ Representative.geocodio_search('arg1', 'arg2', 'arg3') }.to raise_error(ArgumentError)
+      expect { described_class.geocodio_search(@query, 'num') }.to raise_error(ArgumentError)
+      expect { described_class.geocodio_search }.to raise_error(ArgumentError)
+      expect { described_class.geocodio_search('arg1', 'arg2', 'arg3') }.to raise_error(ArgumentError)
     end
 
-    it 'fetches the correct API key' do
-      expect(ENV).to receive(:fetch).with(@key_name, anything)
-      .and_return(@real_geocodio_api_key)
-
+    it 'fetches the correct API key with correct args' do
       geocodio_search
+
+      expect(ENV).to have_received(:fetch).with(@key_name, anything)
     end
 
-    it 'calls Geocodio::Gem.new and returns correct geocodio object' do
-      expect(Geocodio::Gem).to receive(:new).and_return(@geocodio_double)
-
+    it 'calls Geocodio::Gem.new with correct args' do
       geocodio_search
+
+      expect(Geocodio::Gem).to have_received(:new).with(@geocodio_api_key)
+    end
+
+    it 'calls .geocode with correct args and returns correct object' do
+      search_res = geocodio_search
+
+      expect(@geocodio_double).to have_received(:geocode).with(@query, ['cd'])
+      expect(search_res).to eq(@rep_info)
     end
   end
 end
