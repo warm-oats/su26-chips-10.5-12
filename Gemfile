@@ -71,6 +71,9 @@ group :development, :test do
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
   gem 'debug'
 
+  # Adds more convenient matcher to make testing easier
+  gem 'shoulda-matchers', '~> 8.0'
+
   # Handy text output of DB schema
   gem 'annotate'
 

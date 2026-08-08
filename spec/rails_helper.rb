@@ -70,6 +70,14 @@ system('bin/rails javascript:build css:build >/dev/null')
 # You may want to edit `ApplicationHelper#login_enabled?` however.
 OmniAuth.config.test_mode = true
 
+# Adds more convenient matchers to make testing easier
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
@@ -90,6 +98,9 @@ RSpec.configure do |config|
   config.after do
     DatabaseCleaner.clean
   end
+
+  # TimeHelpers needed to test methods needing time stubs
+  config.include ActiveSupport::Testing::TimeHelpers
 
   # FactoryBot Config.
   config.include FactoryBot::Syntax::Methods
