@@ -29,11 +29,13 @@
           .form-group.row
             .col-12
               = select_tag :state, options_for_select(ApplicationHelper.state_symbols_by_name),
-                           { prompt: 'Select a state', class: 'form-control', id: 'actionmap-events-filter-state' }
+                           { prompt: 'Select a state', class: 'form-control', id: 'actionmap-events-filter-state',
+                            'aria-label': 'Select a state' }
           .form-group.row
             .col-12
               = select_tag :county, options_for_select([]),
-                           { prompt: 'Select a county', class: 'form-control', id: 'actionmap-events-filter-county' }
+                           { prompt: 'Select a county', class: 'form-control', id: 'actionmap-events-filter-county',
+                            'aria-label': 'Select a county' }
           = submit_tag 'Filter by State', name: nil, class: 'btn btn-primary my-2',
             id: 'actionmap-events-filter-submit', disabled: true # Enabled by Javascript
     - if @events.empty?
