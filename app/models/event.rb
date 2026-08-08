@@ -29,6 +29,6 @@ class Event < ApplicationRecord
   delegate :state, to: :county, allow_nil: true
 
   def county_names_by_id
-    county&.state&.counties.to_h { |c| [c.name, c.id] } || []
+    county&.state&.counties.to_h { |c| [c.name, c.id] } || {}
   end
 end

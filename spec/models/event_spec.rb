@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: representatives
+# Table name: events
 #
 # t.string "name",          not null
 # t.text "description"
@@ -17,15 +17,46 @@ require 'rails_helper'
 require 'shoulda/matchers'
 
 RSpec.describe Event do
-  before do
-    @past_time = Time.zone.parse('2010-01-01 8:30:00')
-    @future_time = Time.zone.parse('2010-01-01 8:32:00')
-    @start_time = Time.zone.parse('2010-01-01 8:31:00')
-    @end_time = Time.zone.parse('2010-01-01 9:30:00')
+  let(:current_time) { Time.zone.local(2026, 8, 8, 12, 0, 0) }
+  let(:state) do
+    State.create!(
+      name:         'California',
+      symbol:       'CA',
+      fips_code:    6,
+      is_territory: 0,
+      lat_min:      32.30,
+      lat_max:      40.00,
+      long_min:     114.8,
+      long_max:     124.24
+    )
+  end
+  let(:county) { state.counties.create!(name: 'Alameda', fips_code: 1, fips_class: 'H1') }
+  let(:valid_event_attributes) do
+    {
+      name:        'Community Meeting',
+      description: 'Planning meetup',
+      county:      county,
+      start_time:  current_time + 1.hour,
+      end_time:    current_time + 2.hours
+    }
+  end
 
-    travel_to @start_time do
-      @event = described_class.new(start_time: @start_time, end_time: @end_time)
-    end
+  def event_with_times(start_time, end_time)
+    described_class.new(valid_event_attributes.merge(start_time: start_time, end_time: end_time))
+  end
+
+  def expect_invalid_start_time(start_time, end_time)
+    event = event_with_times(start_time, end_time)
+
+    expect(event).not_to be_valid
+    expect(event.errors[:start_time]).to include('must be after today')
+  end
+
+  def expect_invalid_end_time(start_time, end_time)
+    event = event_with_times(start_time, end_time)
+
+    expect(event).not_to be_valid
+    expect(event.errors[:end_time]).to include('must be after start time')
   end
 
   describe 'validations' do
@@ -33,24 +64,30 @@ RSpec.describe Event do
     it { is_expected.to validate_presence_of(:end_time) }
     it { is_expected.to belong_to(:county) }
 
-    it 'does not accept events currently happening' do
-      expect(@event).not_to be_valid
-      expect(@event.errors[:start_time]).to include('must be after today')
+    it 'accepts future events' do
+      travel_to current_time do
+        event = described_class.new(valid_event_attributes)
+
+        expect(event).to be_valid
+      end
+    end
+
+    it 'does not accept events that are already in progress' do
+      travel_to current_time do
+        expect_invalid_start_time(current_time - 30.minutes, current_time + 30.minutes)
+      end
     end
 
     it 'does not accept events that already happened' do
-      @event.start_time = @past_time
-
-      expect(@event).not_to be_valid
-      expect(@event.errors[:start_time]).to include('must be after today')
+      travel_to current_time do
+        expect_invalid_start_time(current_time - 2.hours, current_time - 1.hour)
+      end
     end
 
     it 'does not accept events with end times before start times' do
-      @event.start_time = @future_time
-      @event.end_time = @start_time
-
-      expect(@event).not_to be_valid
-      expect(@event.errors[:end_time]).to include('must be after start time')
+      travel_to current_time do
+        expect_invalid_end_time(current_time + 2.hours, current_time + 1.hour)
+      end
     end
   end
 
@@ -83,13 +120,13 @@ RSpec.describe Event do
       expect(@event.county_names_by_id).to eq({ 'Alameda' => 1, 'Los Angeles' => 2, 'Santa Clara' => 3 })
     end
 
-    it 'returns empty array when state is nil' do
+    it 'returns empty hash when state is nil' do
       @ca_state_double = nil
 
       expect(@event.county_names_by_id).to eq({})
     end
 
-    it 'returns empty array when county is nil' do
+    it 'returns empty hash when county is nil' do
       @alameda_county_doub = nil
 
       expect(@event.county_names_by_id).to eq({})
