@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # == Schema Information
 #
@@ -32,7 +33,7 @@ RSpec.describe UserController do
     end
 
     it 'accepts and returns good response' do
-      expect(response).to have_http_status(:ok)
+      expect(response).to be_successful
     end
 
     it 'redirects to login page if user not logged in' do
@@ -43,7 +44,7 @@ RSpec.describe UserController do
     end
 
     it 'redirects to login page if user id is invalid' do
-      session[:user_id] = -12345
+      session[:user_id] = -12_345
       get :profile
 
       expect(response).to redirect_to(login_path)
