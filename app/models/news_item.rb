@@ -35,11 +35,10 @@ class NewsItem < ApplicationRecord
   end
 
   def self.issues
-    all_issues = ["Free Speech", "Immigration", "Terrorism", 
-    "Social Security and Medicare", "Abortion", "Student Loans", 
-    "Gun Control", "Unemployment", "Climate Change", "Homelessness", "Racism", "Tax Reform", "Net Neutrality", "Religious Freedom", 
-    "Border Security", "Minimum Wage", "Equal Pay"]
-
-    all_issues
+    ['Free Speech', 'Immigration', 'Terrorism',
+     'Social Security and Medicare', 'Abortion', 'Student Loans',
+     'Gun Control', 'Unemployment', 'Climate Change', 'Homelessness',
+     'Racism', 'Tax Reform', 'Net Neutrality', 'Religious Freedom',
+     'Border Security', 'Minimum Wage', 'Equal Pay']
   end
 end
