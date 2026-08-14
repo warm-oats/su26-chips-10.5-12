@@ -5,5 +5,5 @@ When('I log in with Google') do
 end
 
 Then('I click {string}') do |string|
-  click_link(string)
+  click_link(string, match: :first)
 end
