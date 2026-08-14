@@ -23,10 +23,10 @@ Given 'there is a representative with a news article' do
   end
 end
 
-Given 'I am on the news articles page for that representative' do
+Given 'I visit the news articles page for that representative' do
   visit representative_news_items_path(@news_item_representative)
 end
 
-Given 'I am on the news article page for that article' do
+Given 'I visit the news article page for that article' do
   visit representative_news_item_path(@news_item_representative, @news_item)
 end
