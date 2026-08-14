@@ -31,7 +31,8 @@ RSpec.describe MyNewsItemsController do
   end
 
   def stub_currents_response(news: [@article])
-    allow(ENV).to receive(:fetch).with('CURRENTS_API_KEY', anything).and_return('test-key')
+    allow(Rails.application.credentials).to receive(:[]).and_call_original
+    allow(Rails.application.credentials).to receive(:[]).with(:CURRENTS_API_KEY).and_return('test-key')
     body = { 'status' => 'ok', 'news' => news }.to_json
     response = instance_double(Faraday::Response, success?: true, status: 200, body: body)
     allow(Faraday).to receive(:get).and_return(response)
