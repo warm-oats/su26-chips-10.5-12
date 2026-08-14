@@ -8,6 +8,7 @@ RSpec.describe NewsItemsController do
     @representative = Representative.create!(name: 'Jane Doe', title: 'Representative', ocdid: 'rep-1')
     @news_item = NewsItem.create!(
       representative: @representative,
+      user: @user,
       title:          'Town Hall',
       link:           'https://example.com/town-hall',
       description:    'Local coverage'

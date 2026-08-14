@@ -28,16 +28,19 @@ require 'rails_helper'
 RSpec.describe NewsItem do
   describe '.find_for' do
     before do
+      @user = User.create!(uid: 'placeholder', provider: :developer)
       @representative = Representative.create!(name: 'Jane Doe', title: 'Representative', ocdid: 'rep-1')
       @other_representative = Representative.create!(name: 'John Doe', title: 'Senator', ocdid: 'rep-2')
       @news_item = described_class.create!(
         representative: @representative,
         title:          'Town Hall',
         link:           'https://example.com/town-hall',
-        description:    'Local coverage'
+        description:    'Local coverage',
+        user: @user
       )
       described_class.create!(
         representative: @other_representative,
+        user: @user,
         title:          'Other Story',
         link:           'https://example.com/other'
       )
@@ -51,6 +54,17 @@ RSpec.describe NewsItem do
       new_representative = Representative.create!(name: 'No News', title: 'Mayor', ocdid: 'rep-3')
 
       expect(described_class.find_for(new_representative.id)).to be_nil
+    end
+  end
+
+  describe '.issues' do
+    it 'returns the correct issues array' do
+      expect(described_class.issues).to include(
+        'Terrorism', 'Social Security and Medicare', 'Abortion',
+        'Student Loans', 'Free Speech'
+      )
+
+      expect(described_class.issues.length).to eq(17)
     end
   end
 end
