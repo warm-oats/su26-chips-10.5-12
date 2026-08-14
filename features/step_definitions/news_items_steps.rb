@@ -1,5 +1,5 @@
-#frozen_string_literal = true
+# frozen_string_literal: true
 
-When('I log in with developer') do 
+When('I log in with developer') do
   click_button('Developer')
 end
