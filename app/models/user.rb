@@ -18,8 +18,8 @@
 #  index_users_on_uid_provider  (uid,provider) UNIQUE
 #
 class User < ApplicationRecord
-  has_many :news_items
-  
+  has_many :news_items, dependent: :delete_all
+
   # Add more Authentication Providers here.
   enum :provider, { google_oauth2: 1, github: 2, developer: 3 }, prefix: :provider
 
