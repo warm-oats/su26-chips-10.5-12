@@ -1,11 +1,11 @@
-= form_with url: representative_search_my_news_item_path(@representative), method: :get, scope: :news_item,
+= form_with url: representative_search_my_news_item_path(representative), method: :get, scope: :news_item,
             local: true do |f|
   .form-group.row
     .col-sm-3
       = f.label :representative_id, 'Representative', class: 'col-form-label'
     .col-sm-9
       = f.select :representative_id, representatives_list,
-                 { include_blank: true, selected: news_item.representative_id || @representative.id },
+                 { include_blank: true, selected: news_item.representative_id || representative.id },
                  class: 'form-control'
   .form-group.row
     .col-sm-3
