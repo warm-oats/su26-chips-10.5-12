@@ -4,7 +4,8 @@
 
   .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
     = render 'search_form', news_item:            @news_item,
-                            representatives_list: @representatives_list
+                            representatives_list: @representatives_list,
+                            representative:       @representative
   .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
     .clearfix.mt-3
       .float-right

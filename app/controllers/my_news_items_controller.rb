@@ -76,7 +76,7 @@ class MyNewsItemsController < ApplicationController
   end
 
   def news_item_attributes
-    return news_item_params unless params[:selected_article].present?
+    return news_item_params if params[:selected_article].blank?
 
     selected_article_attributes.merge(search_news_item_params.to_h)
   end

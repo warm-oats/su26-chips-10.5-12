@@ -14,7 +14,11 @@ RSpec.describe CurrentsNewsClient do
   def stub_currents_response(news:, status: 'ok', success: true)
     body = { 'status' => status, 'news' => news }.to_json
     response = instance_double(Faraday::Response, success?: success, status: 200, body: body)
-    allow(Faraday).to receive(:get).and_return(response)
+    allow(Faraday).to receive(:get) do |url, params|
+      @currents_request_url = url
+      @currents_request_params = params
+      response
+    end
   end
 
   describe '#search' do
@@ -33,10 +37,8 @@ RSpec.describe CurrentsNewsClient do
 
       described_class.new(api_key: 'test-key').search('Climate Change')
 
-      expect(Faraday).to have_received(:get).with(
-        described_class::SEARCH_URL,
-        hash_including(keywords: 'Climate Change', page_size: 5, apiKey: 'test-key')
-      )
+      expect(@currents_request_url).to eq(described_class::SEARCH_URL)
+      expect(@currents_request_params).to include(keywords: 'Climate Change', page_size: 5, apiKey: 'test-key')
     end
 
     it 'raises when the API key is missing' do
