@@ -1,0 +1,39 @@
+.row
+  .col-12.col-md-8.offset-md-2.col-xl-6.offset-xl-3
+    %h1.text-center Select news article
+    %dl.row
+      %dt.col-sm-3.text-md-right Representative:
+      %dd.col-sm-9
+        = link_to @representative.name, representative_path(@representative)
+      %dt.col-sm-3.text-md-right Issue:
+      %dd.col-sm-9= @news_item.issue
+
+    - if @articles.present?
+      = form_with url: representative_new_my_news_item_path(@representative), method: :post, local: true do
+        = hidden_field_tag 'news_item[representative_id]', @representative.id
+        = hidden_field_tag 'news_item[issue]', @news_item.issue
+
+        %fieldset
+          %legend Select an article
+          - @articles.each_with_index do |article, index|
+            .card.mb-3
+              .card-body
+                .form-check
+                  = radio_button_tag :selected_article, index, index.zero?,
+                                     id: "selected_article_#{index}", class: 'form-check-input'
+                  = label_tag "selected_article_#{index}", article[:title], class: 'form-check-label'
+                %p.mb-1
+                  = link_to article[:url], article[:url], target: '_blank', rel: 'noopener'
+                %p.mb-0= article[:description]
+                = hidden_field_tag "articles[#{index}][title]", article[:title]
+                = hidden_field_tag "articles[#{index}][url]", article[:url]
+                = hidden_field_tag "articles[#{index}][description]", article[:description]
+
+        .actions
+          = submit_tag 'Save', class: 'btn btn-primary'
+          = link_to representative_news_items_path(@representative), class: 'btn btn-info ml-2' do
+            View news articles
+            %i.fas.fa-arrow-right
+    - else
+      .alert.alert-warning No articles were found for this issue.
+      = link_to 'Search again', representative_new_my_news_item_path(@representative), class: 'btn btn-info'
