@@ -1,39 +1,74 @@
-.row
-  .col-12.col-md-8.offset-md-2.col-xl-6.offset-xl-3
-    %h1.text-center Select news article
-    %dl.row
-      %dt.col-sm-3.text-md-right Representative:
-      %dd.col-sm-9
-        = link_to @representative.name, representative_path(@representative)
-      %dt.col-sm-3.text-md-right Issue:
-      %dd.col-sm-9= @news_item.issue
+.container.py-4
+  .row.justify-content-center
+    .col-12.col-lg-8
+      %h1.text-center.mb-4 Select news article
 
-    - if @articles.present?
-      = form_with url: representative_new_my_news_item_path(@representative), method: :post, local: true do
-        = hidden_field_tag 'news_item[representative_id]', @representative.id
-        = hidden_field_tag 'news_item[issue]', @news_item.issue
+      .card.bg-light.border-0.mb-4
+        .card-body
+          %dl.row.mb-0
+            %dt.col-sm-3 Representative:
+            %dd.col-sm-9
+              = link_to @representative.name,
+                        representative_path(@representative),
+                        class: 'fw-semibold'
 
-        %fieldset
-          %legend Select an article
-          - @articles.each_with_index do |article, index|
-            .card.mb-3
-              .card-body
-                .form-check
-                  = radio_button_tag :selected_article, index, index.zero?,
-                                     id: "selected_article_#{index}", class: 'form-check-input'
-                  = label_tag "selected_article_#{index}", article[:title], class: 'form-check-label'
-                %p.mb-1
-                  = link_to article[:url], article[:url], target: '_blank', rel: 'noopener'
-                %p.mb-0= article[:description]
-                = hidden_field_tag "articles[#{index}][title]", article[:title]
-                = hidden_field_tag "articles[#{index}][url]", article[:url]
-                = hidden_field_tag "articles[#{index}][description]", article[:description]
+            %dt.col-sm-3 Issue:
+            %dd.col-sm-9
+              %span.badge.bg-primary= @news_item.issue
 
-        .actions
-          = submit_tag 'Save', class: 'btn btn-primary'
-          = link_to representative_news_items_path(@representative), class: 'btn btn-info ml-2' do
-            View news articles
-            %i.fas.fa-arrow-right
-    - else
-      .alert.alert-warning No articles were found for this issue.
-      = link_to 'Search again', representative_new_my_news_item_path(@representative), class: 'btn btn-info'
+      - if @articles.present?
+        = form_with url: representative_new_my_news_item_path(@representative),
+                    method: :post, local: true do
+          = hidden_field_tag 'news_item[representative_id]', @representative.id
+          = hidden_field_tag 'news_item[issue]', @news_item.issue
+
+          %fieldset
+            %legend.h4.mb-2 Choose an article
+            %p.text-muted.mb-3
+              Select one of the available articles to save to ActionMap.
+
+            - @articles.each_with_index do |article, index|
+              .card.mb-3.shadow-sm
+                .card-body
+                  .form-check
+                    = radio_button_tag :selected_article, index, index.zero?,
+                                       id: "selected_article_#{index}",
+                                       class: 'form-check-input'
+                    = label_tag "selected_article_#{index}",
+                                class: 'form-check-label w-100' do
+                      %span.h5.d-block.mb-2= article[:title]
+
+                  %p.mb-2
+                    = link_to 'Read full article',
+                              article[:url],
+                              target: '_blank',
+                              rel: 'noopener',
+                              aria: { label: "Read full article: #{article[:title]}" }
+
+                  %p.text-muted.mb-0
+                    = article[:description].presence || 'No description available.'
+
+                  = hidden_field_tag "articles[#{index}][title]", article[:title]
+                  = hidden_field_tag "articles[#{index}][url]", article[:url]
+                  = hidden_field_tag "articles[#{index}][description]", article[:description]
+
+          .d-flex.flex-column.flex-sm-row.gap-2.mt-4
+            = submit_tag 'Save selected article', class: 'btn btn-primary'
+            = link_to 'Search again',
+                      representative_new_my_news_item_path(@representative),
+                      class: 'btn btn-outline-secondary'
+            = link_to 'View news articles',
+                      representative_news_items_path(@representative),
+                      class: 'btn btn-outline-info'
+
+      - else
+        .alert.alert-warning{ role: 'alert' }
+          No articles were found for this issue.
+
+        .d-flex.flex-column.flex-sm-row.gap-2
+          = link_to 'Search again',
+                    representative_new_my_news_item_path(@representative),
+                    class: 'btn btn-primary'
+          = link_to 'View news articles',
+                    representative_news_items_path(@representative),
+                    class: 'btn btn-outline-info'
