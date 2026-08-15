@@ -11,8 +11,8 @@ class Rating < ApplicationRecord
   }
   validates :user_id, uniqueness: { scope: :news_item_id }
 
-  after_save :refresh_news_item_average_rating
   after_destroy :refresh_news_item_average_rating
+  after_save :refresh_news_item_average_rating
 
   private
 

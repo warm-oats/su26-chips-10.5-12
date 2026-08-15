@@ -71,16 +71,7 @@ RSpec.describe NewsItem do
 
   describe '#average_rating_display' do
     it 'shows unrated articles clearly' do
-      user = User.create!(uid: 'rating-user', provider: :developer)
-      representative = Representative.create!(name: 'Jane Doe', title: 'Representative', ocdid: 'rating-rep')
-      news_item = described_class.create!(
-        representative: representative,
-        user:           user,
-        title:          'Story',
-        link:           'https://x.test'
-      )
-
-      expect(news_item.average_rating_display).to eq('Not rated')
+      expect(described_class.new.average_rating_display).to eq('Not rated')
     end
   end
 end
