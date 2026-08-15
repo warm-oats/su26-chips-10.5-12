@@ -76,6 +76,7 @@ RSpec.describe MyNewsItemsController do
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
+
     it 'shows an alert when the representative selection is missing' do
       get :search, params: missing_representative_search_params
 
