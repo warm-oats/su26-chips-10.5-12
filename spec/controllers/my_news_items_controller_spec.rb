@@ -30,6 +30,22 @@ RSpec.describe MyNewsItemsController do
     }
   end
 
+  def missing_representative_search_params
+    {
+      representative_id: @representative.id,
+      news_item:         { representative_id: '', issue: 'Climate Change' }
+    }
+  end
+
+  def expected_selected_article_attributes
+    {
+      title:             'Climate Story',
+      link:              'https://example.com/climate-story',
+      description:       'Climate article summary',
+      representative_id: @representative.id
+    }
+  end
+
   def stub_currents_response(news: [@article])
     allow(Rails.application.credentials).to receive(:[]).and_call_original
     allow(Rails.application.credentials).to receive(:[]).with(:CURRENTS_API_KEY).and_return('test-key')
@@ -61,13 +77,7 @@ RSpec.describe MyNewsItemsController do
       expect(response).to have_http_status(:unprocessable_entity)
     end
     it 'shows an alert when the representative selection is missing' do
-      get :search, params: {
-        representative_id: @representative.id,
-        news_item: {
-          representative_id: '',
-          issue: 'Climate Change'
-        }
-      }
+      get :search, params: missing_representative_search_params
 
       expect(response).to have_http_status(:unprocessable_entity)
       expect(flash[:alert]).to eq('Select a representative and issue before searching.')
@@ -87,15 +97,11 @@ RSpec.describe MyNewsItemsController do
       expect(NewsItem.last.issue).to eq('Climate Change')
       expect(NewsItem.last.user).to eq(@user)
     end
+
     it 'stores all fields from the selected article' do
       post :create, params: selected_article_params
 
-      expect(NewsItem.last).to have_attributes(
-        title:             'Climate Story',
-        link:              'https://example.com/climate-story',
-        description:       'Climate article summary',
-        representative_id: @representative.id
-      )
+      expect(NewsItem.last).to have_attributes(expected_selected_article_attributes)
     end
 
     it 'redirects to the saved news article' do
