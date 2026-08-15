@@ -23,10 +23,35 @@ Given 'there is a representative with a news article' do
   end
 end
 
+Given 'Currents has articles for {string}' do |issue|
+  articles = [
+    {
+      title:       'Free Speech Article',
+      url:         'https://example.com/free-speech',
+      description: 'Free speech coverage'
+    }
+  ]
+
+  original_search = CurrentsNewsClient.instance_method(:search)
+  CurrentsNewsClient.define_method(:search) do |requested_issue|
+    raise "Unexpected Currents issue: #{requested_issue}" unless requested_issue == issue
+
+    articles
+  end
+
+  @currents_news_client_restore = lambda do
+    CurrentsNewsClient.define_method(:search, original_search)
+  end
+end
+
 Given 'I visit the news articles page for that representative' do
   visit representative_news_items_path(@news_item_representative)
 end
 
 Given 'I visit the news article page for that article' do
   visit representative_news_item_path(@news_item_representative, @news_item)
+end
+
+After do
+  @currents_news_client_restore&.call
 end
