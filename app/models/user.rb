@@ -19,6 +19,7 @@
 #
 class User < ApplicationRecord
   has_many :news_items, dependent: :delete_all
+  has_many :ratings, dependent: :delete_all
 
   # Add more Authentication Providers here.
   enum :provider, { google_oauth2: 1, github: 2, developer: 3 }, prefix: :provider

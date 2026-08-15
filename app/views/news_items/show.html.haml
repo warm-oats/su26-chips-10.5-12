@@ -18,6 +18,10 @@
             %a.text-dark.text-decoration-underline{ href: representative_path(@representative) }
               = @news_item.representative.name
         %dl.row
+          %dt.col-sm-3.text-md-right Average Rating:
+          %dd.col-sm-9
+            = @news_item.average_rating_display
+        %dl.row
           %dt.col-sm-3.text-md-right Time Added:
           %dd.col-sm-9
             %time.timeago{ datetime: @news_item.created_at.iso8601 }

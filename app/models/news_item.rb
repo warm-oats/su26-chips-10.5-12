@@ -5,6 +5,7 @@
 # Table name: news_items
 #
 #  id                :integer          not null, primary key
+#  average_rating    :decimal(3, 2)   default(0.0), not null
 #  description       :text
 #  issue             :string
 #  link              :string           not null
@@ -27,6 +28,7 @@ class NewsItem < ApplicationRecord
   # TODO: this belongs to a user (creator_id)
   belongs_to :representative
   belongs_to :user
+  has_many :ratings, dependent: :destroy
 
   def self.find_for(representative_id)
     NewsItem.find_by(
@@ -40,5 +42,15 @@ class NewsItem < ApplicationRecord
      'Gun Control', 'Unemployment', 'Climate Change', 'Homelessness',
      'Racism', 'Tax Reform', 'Net Neutrality', 'Religious Freedom',
      'Border Security', 'Minimum Wage', 'Equal Pay']
+  end
+
+  def update_average_rating!
+    update!(average_rating: ratings.average(:score).to_f.round(2))
+  end
+
+  def average_rating_display
+    return 'Not rated' if ratings.none?
+
+    format('%.1f', average_rating.to_f)
   end
 end

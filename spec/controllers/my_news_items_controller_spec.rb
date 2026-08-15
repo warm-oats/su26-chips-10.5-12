@@ -25,6 +25,7 @@ RSpec.describe MyNewsItemsController do
     {
       representative_id: @representative.id,
       selected_article:  '0',
+      rating_score:      '4',
       news_item:         { representative_id: @representative.id, issue: 'Climate Change' },
       articles:          { '0' => @article }
     }
@@ -112,6 +113,13 @@ RSpec.describe MyNewsItemsController do
       expect(response).to redirect_to(
         representative_news_item_path(@representative, saved_article)
       )
+    end
+
+    it 'stores the selected rating and updates the article average' do
+      post :create, params: selected_article_params
+
+      expect(NewsItem.last.ratings.last.score).to eq(4)
+      expect(NewsItem.last.average_rating).to eq(4.0)
     end
   end
 end

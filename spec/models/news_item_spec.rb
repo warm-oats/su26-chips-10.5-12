@@ -5,6 +5,7 @@
 # Table name: news_items
 #
 #  id                :integer          not null, primary key
+#  average_rating    :decimal(3, 2)   default(0.0), not null
 #  description       :text
 #  issue             :string
 #  link              :string           not null
@@ -65,6 +66,12 @@ RSpec.describe NewsItem do
       )
 
       expect(described_class.issues.length).to eq(17)
+    end
+  end
+
+  describe '#average_rating_display' do
+    it 'shows unrated articles clearly' do
+      expect(described_class.new.average_rating_display).to eq('Not rated')
     end
   end
 end

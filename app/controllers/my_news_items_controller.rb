@@ -28,7 +28,7 @@ class MyNewsItemsController < ApplicationController
     @news_item.user = current_user
     @representative = @news_item.representative || @representative
 
-    if @news_item.save
+    if save_news_item_with_optional_rating
       redirect_to representative_news_item_path(@representative, @news_item),
                   notice: 'News item was successfully created.'
     else
@@ -84,6 +84,29 @@ class MyNewsItemsController < ApplicationController
   def selected_article_attributes
     article = params.require(:articles).require(params[:selected_article]).permit(:title, :url, :description)
     { title: article[:title], link: article[:url], description: article[:description] }
+  end
+
+  def save_news_item_with_optional_rating
+    ActiveRecord::Base.transaction do
+      @news_item.save!
+      create_rating! if rating_score.present?
+    end
+    true
+  rescue ActiveRecord::RecordInvalid => e
+    add_rating_error(e.record) unless e.record == @news_item
+    false
+  end
+
+  def create_rating!
+    @news_item.ratings.create!(user: current_user, score: rating_score)
+  end
+
+  def rating_score
+    params[:rating_score]
+  end
+
+  def add_rating_error(rating)
+    @news_item.errors.add(:base, rating.errors.full_messages.to_sentence)
   end
 
   def search_params_present?
