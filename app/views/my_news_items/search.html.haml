@@ -39,7 +39,7 @@
                       %span.h5.d-block.mb-2= article[:title]
 
                   %p.mb-2
-                    = link_to 'Read full article',
+                    = link_to article[:url],
                               article[:url],
                               target: '_blank',
                               rel: 'noopener',
@@ -53,7 +53,7 @@
                   = hidden_field_tag "articles[#{index}][description]", article[:description]
 
           .d-flex.flex-column.flex-sm-row.gap-2.mt-4
-            = submit_tag 'Save selected article', class: 'btn btn-primary'
+            = submit_tag 'Save', class: 'btn btn-primary'
             = link_to 'Search again',
                       representative_new_my_news_item_path(@representative),
                       class: 'btn btn-outline-secondary'
