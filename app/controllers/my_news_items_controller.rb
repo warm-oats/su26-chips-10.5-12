@@ -8,14 +8,25 @@ class MyNewsItemsController < ApplicationController
   before_action :set_news_item, only: %i[edit update destroy]
 
   def new
-    @news_item = NewsItem.new
+    @news_item = NewsItem.new(representative: @representative)
   end
 
   def edit; end
 
+  def search
+    @news_item = NewsItem.new(search_news_item_params)
+    return render_missing_search_params unless search_params_present?
+
+    @representative = Representative.find(@news_item.representative_id)
+    @articles = CurrentsNewsClient.new.search(@news_item.issue)
+  rescue CurrentsNewsClient::Error, ArgumentError => e
+    render_failed_search(e.message)
+  end
+
   def create
-    @news_item = NewsItem.new(news_item_params)
+    @news_item = NewsItem.new(news_item_attributes)
     @news_item.user = current_user
+    @representative = @news_item.representative || @representative
 
     if @news_item.save
       redirect_to representative_news_item_path(@representative, @news_item),
@@ -58,5 +69,33 @@ class MyNewsItemsController < ApplicationController
 
   def news_item_params
     params.require(:news_item).permit(:title, :issue, :description, :link, :representative_id)
+  end
+
+  def search_news_item_params
+    params.require(:news_item).permit(:representative_id, :issue)
+  end
+
+  def news_item_attributes
+    return news_item_params if params[:selected_article].blank?
+
+    selected_article_attributes.merge(search_news_item_params.to_h)
+  end
+
+  def selected_article_attributes
+    article = params.require(:articles).require(params[:selected_article]).permit(:title, :url, :description)
+    { title: article[:title], link: article[:url], description: article[:description] }
+  end
+
+  def search_params_present?
+    @news_item.representative_id.present? && @news_item.issue.present?
+  end
+
+  def render_missing_search_params
+    render_failed_search('Select a representative and issue before searching.')
+  end
+
+  def render_failed_search(message)
+    flash.now[:alert] = message
+    render :new, status: :unprocessable_entity
   end
 end

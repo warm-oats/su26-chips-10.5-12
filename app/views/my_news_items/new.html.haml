@@ -1,13 +1,11 @@
 .row
   .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
-    %h1.text-center New news article
+    %h1.text-center Find news articles
 
   .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
-    = render 'form', news_item:            @news_item,
-                     form_url:             representative_new_my_news_item_path(@representative),
-                     form_method:          :post,
-                     representatives_list: @representatives_list,
-                     disabled_for_user:    false
+    = render 'search_form', news_item:            @news_item,
+                            representatives_list: @representatives_list,
+                            representative:       @representative
   .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
     .clearfix.mt-3
       .float-right

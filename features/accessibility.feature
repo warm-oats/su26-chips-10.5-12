@@ -42,9 +42,15 @@ Scenario: The California State Page
     Then the page should be axe clean
 
 ## CS169: Add the third page here.
-# @a11y
-# Scenario: ...
+@a11y
+Scenario: The News Articles Page
+    Given there is a representative with a news article
+    And I visit the news articles page for that representative
+    Then the page should be axe clean
 
 ## CS169: Add the fourth page here.
-# @a11y
-# Scenario: ...
+@a11y
+Scenario: The News Article Page
+    Given there is a representative with a news article
+    And I visit the news article page for that article
+    Then the page should be axe clean
