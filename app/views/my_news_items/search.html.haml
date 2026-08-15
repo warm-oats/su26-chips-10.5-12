@@ -52,6 +52,12 @@
                   = hidden_field_tag "articles[#{index}][url]", article[:url]
                   = hidden_field_tag "articles[#{index}][description]", article[:description]
 
+          .form-group.mb-3
+            = label_tag :rating_score, 'Rating', class: 'form-label'
+            = select_tag :rating_score,
+                         options_for_select((1..5).map { |score| [score, score] }, 3),
+                         class: 'form-select'
+
           .d-flex.flex-column.flex-sm-row.gap-2.mt-4
             = submit_tag 'Save', class: 'btn btn-primary'
             = link_to 'Search again',

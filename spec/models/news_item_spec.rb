@@ -5,6 +5,7 @@
 # Table name: news_items
 #
 #  id                :integer          not null, primary key
+#  average_rating    :decimal(3, 2)   default(0.0), not null
 #  description       :text
 #  issue             :string
 #  link              :string           not null
@@ -65,6 +66,21 @@ RSpec.describe NewsItem do
       )
 
       expect(described_class.issues.length).to eq(17)
+    end
+  end
+
+  describe '#average_rating_display' do
+    it 'shows unrated articles clearly' do
+      user = User.create!(uid: 'rating-user', provider: :developer)
+      representative = Representative.create!(name: 'Jane Doe', title: 'Representative', ocdid: 'rating-rep')
+      news_item = described_class.create!(
+        representative: representative,
+        user:           user,
+        title:          'Story',
+        link:           'https://x.test'
+      )
+
+      expect(news_item.average_rating_display).to eq('Not rated')
     end
   end
 end
